@@ -32,19 +32,19 @@ vectorWatch.on('options', function(event, response) {
         case 'Who':
             switch(settings['What'].name) {
                 case 'Hello':
-                    response.addOption("Friend");
-                    response.addOption("Vector");
-                    response.addOption("World");
+                    response.addOption('Friend');
+                    response.addOption('Vector');
+                    response.addOption('World');
                     break;
                 case 'Bienvenue':
-                    response.addOption("Mon Ami");
-                    response.addOption("Vector");
-                    response.addOption("Le Monde");
+                    response.addOption('Mon Ami');
+                    response.addOption('Vector');
+                    response.addOption('Le Monde');
                     break;
                 case 'Hola':
-                    response.addOption("Amigo");
-                    response.addOption("Vector");
-                    response.addOption("Mundo");
+                    response.addOption('Amigo');
+                    response.addOption('Vector');
+                    response.addOption('Mundo');
                     break;
             }
             break;
