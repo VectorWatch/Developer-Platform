@@ -24,7 +24,7 @@ vectorWatch.on('subscribe', function(event, response) {
     // your stream was added to a watch face
     console.log('on subscribe');
 
-    response.setValue("Hello World!");
+    response.setValue(event.getUserSettings().settings['What'].name);
     response.send();
 });
 
