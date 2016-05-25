@@ -2,6 +2,7 @@
 debugger;
 
 var StorageProvider = require('vectorwatch-storageprovider');
+var Schedule = require('node-schedule');
 var VectorWatch = require('vectorwatch-browser');
 
 var vectorWatch = new VectorWatch({
@@ -49,9 +50,9 @@ function pushUpdates() {
 }
 
 function scheduleJob() {
-    var scheduleRule = new schedule.RecurrenceRule();
+    var scheduleRule = new Schedule.RecurrenceRule();
     scheduleRule.minute = [15, 45]; // will execute at :15 and :45 every hour
-    schedule.scheduleJob(scheduleRule, pushUpdates);
+    Schedule.scheduleJob(scheduleRule, pushUpdates);
 }
 
 vectorWatch.createServer(scheduleJob);
