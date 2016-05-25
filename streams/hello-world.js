@@ -27,3 +27,5 @@ vectorWatch.on('unsubscribe', function(event, response) {
     // your stream was removed from a watch face
     console.log('on unsubscribe');
 });
+
+vectorWatch.createServer();
