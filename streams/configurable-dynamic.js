@@ -29,9 +29,9 @@ vectorWatch.on('options', function(event, response) {
     
     switch(event.req.body.settingName) {
         case 'Who':
-            switch(event.req.body.userSettings[Who].name) {
+            switch(event.req.body.userSettings['Who'].name) {
                 case 'Hello':
-                    response.addOption("Frield");
+                    response.addOption("Friend");
                     response.addOption("Vector");
                     response.addOption("World");
                     break;
