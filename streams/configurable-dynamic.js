@@ -26,10 +26,11 @@ vectorWatch.on('config', function(event, response) {
 vectorWatch.on('options', function(event, response) {
     // dynamic options for a specific setting name was requested
     console.log('on options');
+    var settings = event.getUserSettings().settings;
     
     switch(event.req.body.settingName) {
         case 'Who':
-            switch(event.req.body.userSettings['What'].name) {
+            switch(settings['What'].name) {
                 case 'Hello':
                     response.addOption("Friend");
                     response.addOption("Vector");
