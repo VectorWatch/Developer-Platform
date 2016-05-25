@@ -13,9 +13,9 @@ vectorWatch.on('config', function(event, response) {
     console.log('on config');
 
     var what = response.createGridList('What');
-    what.addOption('Hello', 'Hello');
-    what.addOption('Bonjour', 'Bonjour');
-    what.addOption('Hola', 'Hola');
+    what.addOption('Hello');
+    what.addOption('Bonjour');
+    what.addOption('Hola');
 
     response.send();
 });
