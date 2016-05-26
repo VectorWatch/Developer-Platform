@@ -52,7 +52,7 @@ vectorWatch.on('options', function(event, response) {
             break;
     }
 
-    return response;
+    response.send();
 });
 
 vectorWatch.on('subscribe', function(event, response) {
