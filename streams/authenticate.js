@@ -18,7 +18,7 @@ var authProvider = new OAuth2Provider (StorageProvider, {
     authorizeUrl: 'https://www.facebook.com/dialog/oauth?response_type=code&scope=public_profile'
 });
 
-vectorWatch.setStorageProvider(storageProvider);
+vectorWatch.setStorageProvider(StorageProvider);
 vectorWatch.setAuthProvider(authProvider);
 
 var logger = vectorWatch.logger;
@@ -35,7 +35,6 @@ vectorWatch.on('subscribe', function(event, response) {
     logger.info('on subscribe');
 
     var settings = event.getUserSettings().settings;
-    var channelLabel = event.getChannelLabel();
 
     event.getAuthTokensAsync().then(function(authTokens) {
         if (!authTokens) {
@@ -53,6 +52,7 @@ vectorWatch.on('subscribe', function(event, response) {
                     var data = JSON.parse(data);
                     response.setValue(data['name']);
                 } catch (err) {
+    	            response.setValue("ERROR");
                     return logger.error(err);
                 }
             }
