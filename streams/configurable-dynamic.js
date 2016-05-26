@@ -38,7 +38,7 @@ vectorWatch.on('options', function(event, response) {
                     response.addOption('Vector');
                     response.addOption('World');
                     break;
-                case 'Bienvenue':
+                case 'Bonjour':
                     response.addOption('Mon Ami');
                     response.addOption('Vector');
                     response.addOption('Le Monde');
