@@ -8,9 +8,11 @@ var vectorWatch = new VectorWatch({
     token: process.env.VECTOR_TOKEN
 });
 
+var logger = vectorWatch.logger;
+
 vectorWatch.on('config', function(event, response) {
     // your stream was just dragged onto a watch face
-    console.log('on config');
+    logger.info('on config');
 
     var what = response.createGridList('What');
     what.addOption('Hello');
@@ -25,7 +27,7 @@ vectorWatch.on('config', function(event, response) {
 
 vectorWatch.on('options', function(event, response) {
     // dynamic options for a specific setting name was requested
-    console.log('on options');
+    logger.info('on options');
     var settings = event.getUserSettings().settings;
     
     switch(event.req.body.settingName) {
@@ -55,7 +57,7 @@ vectorWatch.on('options', function(event, response) {
 
 vectorWatch.on('subscribe', function(event, response) {
     // your stream was added to a watch face
-    console.log('on subscribe');
+    logger.info('on subscribe');
 
     var settings = event.getUserSettings().settings;
     var streamText = settings['What'].name + ' ' + settings['Who'].name;
@@ -67,7 +69,7 @@ vectorWatch.on('subscribe', function(event, response) {
 
 vectorWatch.on('unsubscribe', function(event, response) {
     // your stream was removed from a watch face
-    console.log('on unsubscribe');
+    logger.info('on unsubscribe');
 });
 
 vectorWatch.createServer();

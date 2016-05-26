@@ -8,9 +8,11 @@ var vectorWatch = new VectorWatch({
     token: process.env.VECTOR_TOKEN
 });
 
+var logger = vectorWatch.logger;
+
 vectorWatch.on('config', function(event, response) {
     // your stream was just dragged onto a watch face
-    console.log('on config');
+    logger.info('on config');
 
     var what = response.createGridList('What');
     what.addOption('Hello');
@@ -22,15 +24,23 @@ vectorWatch.on('config', function(event, response) {
 
 vectorWatch.on('subscribe', function(event, response) {
     // your stream was added to a watch face
-    console.log('on subscribe');
+    var streamText;
+    try {
+        streamText = event.getUserSettings().settings['What'].name;
+        logger.info('on subscribe: ' + streamText);
+    } catch(err) {
+        logger.error('on subscribe - malformed user setting: ' + err.message);
+        streamText = 'ERROR';
+    }
 
-    response.setValue(event.getUserSettings().settings['What'].name);
+    response.setValue(streamText);
+
     response.send();
 });
 
 vectorWatch.on('unsubscribe', function(event, response) {
     // your stream was removed from a watch face
-    console.log('on unsubscribe');
+    logger.info('on unsubscribe');
 });
 
 vectorWatch.createServer();

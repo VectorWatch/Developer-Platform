@@ -8,16 +8,18 @@ var vectorWatch = new VectorWatch({
     token: process.env.VECTOR_TOKEN
 });
 
+var logger = vectorWatch.logger;
+
 vectorWatch.on('config', function(event, response) {
     // your stream was just dragged onto a watch face
-    console.log('on config');
+    logger.info('on config');
 
     response.send();
 });
 
 vectorWatch.on('subscribe', function(event, response) {
     // your stream was added to a watch face
-    console.log('on subscribe');
+    logger.info('on subscribe');
 
     response.setValue("Hello World!");
     response.send();
@@ -25,7 +27,7 @@ vectorWatch.on('subscribe', function(event, response) {
 
 vectorWatch.on('unsubscribe', function(event, response) {
     // your stream was removed from a watch face
-    console.log('on unsubscribe');
+    logger.info('on unsubscribe');
 });
 
 vectorWatch.createServer();
