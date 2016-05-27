@@ -66,9 +66,9 @@ function getCountriesList(response, searchTerm) {
     
     var url = 'https://restcountries.eu/rest/v1/name/' + encodeURIComponent(searchTerm);
     
-    request(url, function (error, response, body) {
-        if (response.statusCode != 200) {
-            logger.info('Countries REST call error ' + response.statusCode + ' for ' + url + ' : ' + error);
+    request(url, function (error, httpResponse, body) {
+        if (httpResponse.statusCode != 200) {
+            logger.info('Countries REST call error ' + httpResponse.statusCode + ' for ' + url + ' : ' + error);
             response.addOption('ERROR');
         }
         
