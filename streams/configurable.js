@@ -15,6 +15,7 @@ vectorWatch.on('config', function(event, response) {
     logger.info('on config');
 
     var what = response.createGridList('What');
+    what.setHint('What would you like to say?');
     what.addOption('Hello');
     what.addOption('Bonjour');
     what.addOption('Hola');
