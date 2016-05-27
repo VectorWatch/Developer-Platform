@@ -41,24 +41,24 @@ vectorWatch.on('subscribe', function(event, response) {
             response.sendInvalidAuthTokens();
         }
 
-	var url = "https://graph.facebook.com/v2.6/me/?fields=id%2Cname";
+        var url = "https://graph.facebook.com/v2.6/me/?fields=id%2Cname";
 
         authProvider.get(url, authTokens.access_token, function (err, data) {
             if (err) {
-    	        response.setValue("ERROR");
+                response.setValue("ERROR");
                 logger.error(err); 
             } else {
                 try {
                     var data = JSON.parse(data);
                     response.setValue(data['name']);
                 } catch (err) {
-    	            response.setValue("ERROR");
+                    response.setValue("ERROR");
                     return logger.error(err);
                 }
             }
             response.send();
         });
-    }
+    });
 });
 
 vectorWatch.on('unsubscribe', function(event, response) {
