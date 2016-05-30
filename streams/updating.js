@@ -37,9 +37,13 @@ vectorWatch.on('unsubscribe', function(event, response) {
     logger.info('on unsubscribe');
 });
 
+function zerofy(n) {
+    return (n<10)?'0'+n:n;
+}
+
 function getCurrentTime() {
     var d = new Date();
-    return d.getHours() + ':' + d.getMinutes();
+    return zerofy(d.getHours()) + ':' + zerofy(d.getMinutes());
 }
 
 function pushUpdates() {
