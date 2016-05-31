@@ -93,7 +93,6 @@ function getCountriesList(searchTerm) {
                 reject('Malformed REST service response for ' + url + ': ' + err.message);
             }
 
-            response.send();
         });
     });
 }
