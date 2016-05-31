@@ -1,3 +1,4 @@
+"use strict";
 // trigger the debugger so that you can easily set breakpoints
 debugger;
 
@@ -31,7 +32,16 @@ vectorWatch.on('options', function(event, response) {
 
     switch(settingName) {
         case 'Country':
-            getCountriesList(response, searchTerm);
+            getCountriesList(searchTerm).then(function(countries) {
+                for (var i=0;i<countries.length;i++) {
+                    response.addOption(countries[i]['name']);
+                }
+                response.send();
+            }).catch(function(e) {
+                logger.error(e);
+                response.addOption("ERROR");
+                response.send();
+            });
             break;
         default:
             logger.error("Invalid setting name: " + settingName);
@@ -40,21 +50,26 @@ vectorWatch.on('options', function(event, response) {
     }
 });
 
-
 vectorWatch.on('subscribe', function(event, response) {
     // your stream was added to a watch face
     var streamText;
     try {
-        streamText = event.getUserSettings().settings['Country'].name;
+        getCountryCurrency(event.getUserSettings().settings['Country'].name).then(function(currency) {
+            response.setValue(currency);
+            response.send();
+        }).catch(function(e) {
+            logger.error(e);
+            response.setValue("ERROR");
+            response.send();
+        });
+        
         logger.info('on subscribe: ' + streamText);
     } catch(err) {
         logger.error('on subscribe - malformed user setting: ' + err.message);
-        streamText = 'ERROR';
+        response.setValue("ERROR");
+        response.send();
     }
 
-    response.setValue(streamText);
-
-    response.send();
 });
 
 vectorWatch.on('unsubscribe', function(event, response) {
@@ -62,29 +77,45 @@ vectorWatch.on('unsubscribe', function(event, response) {
     logger.info('on unsubscribe');
 });
 
-function getCountriesList(response, searchTerm) {
-    
-    var url = 'https://restcountries.eu/rest/v1/name/' + encodeURIComponent(searchTerm);
-    
-    request(url, function (error, httpResponse, body) {
-        if (httpResponse.statusCode != 200) {
-            logger.info('Countries REST call error ' + httpResponse.statusCode + ' for ' + url + ' : ' + error);
-            response.addOption('ERROR');
-        }
+function getCountriesList(searchTerm) {
+    return new Promise(function (resolve, reject) {
+        var url = 'https://restcountries.eu/rest/v1/name/' + encodeURIComponent(searchTerm);
         
-        try {
-            var bodyObject = JSON.parse(body);
-            for (var i=0;i<bodyObject.length;i++) {
-                response.addOption(bodyObject[i]['name']);
+        request(url, function (error, httpResponse, body) {
+            if (httpResponse.statusCode != 200) {
+                reject('Countries REST call error ' + httpResponse.statusCode + ' for ' + url + ' : ' + error);
             }
-        } catch(err) {
-            logger.error('Malformed REST service response for ' + url + ': ' + err.message);
-            response.addOption('ERROR');
-        }
 
-        response.send();
+            try {
+                var bodyObject = JSON.parse(body);
+                resolve(bodyObject);
+            } catch(err) {
+                reject('Malformed REST service response for ' + url + ': ' + err.message);
+            }
+
+            response.send();
+        });
+    });
+}
+
+function getCountryCurrency(country) {
+    return new Promise(function (resolve, reject) {
+        var url = 'https://restcountries.eu/rest/v1/name/' + encodeURIComponent(country);
+      
+        request(url, function (error, httpResponse, body) {
+            if (httpResponse.statusCode != 200) {
+                reject('Countries REST call error ' + httpResponse.statusCode + ' for ' + url + ' : ' + error);
+            }
+            
+            try {
+                var bodyObject = JSON.parse(body);
+                resolve(bodyObject[0]['currencies'][0]);
+            } catch(err) {
+                reject('Malformed REST service response for ' + url + ': ' + err.message);
+            }
+            
+        });
     });
 }
 
 vectorWatch.createServer();
-
