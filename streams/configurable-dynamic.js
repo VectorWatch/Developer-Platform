@@ -1,3 +1,4 @@
+"use strict";
 // trigger the debugger so that you can easily set breakpoints
 debugger;
 
