@@ -16,12 +16,12 @@ var storageProvider = new StorageProvider();
 vectorWatch.setStorageProvider(storageProvider);
 
 var authProvider = new OAuth2Provider (storageProvider, {
-    clientId: ***, // your App Id
-    clientSecret: ***, // your App Secret
+    clientId: '***', // your App Id
+    clientSecret: '***', // your App Secret
 
     accessTokenUrl: 'https://graph.facebook.com/oauth/access_token',
     authorizeUrl: 'https://www.facebook.com/dialog/oauth?response_type=code&scope=public_profile',
-    callbackUrl: 'http://localhost:8081/#/authCallback/' + *** + '/' + *** //stream uuid and stream version
+    callbackUrl: window.location.href.replace(/developer\/stream/, 'authCallback')
 });
 
 vectorWatch.setAuthProvider(authProvider);
