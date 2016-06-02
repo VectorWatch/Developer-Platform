@@ -5,21 +5,25 @@ debugger;
 var VectorWatch = require('vectorwatch-browser');
 var OAuth2Provider = require('vectorwatch-authprovider-oauth2');
 var StorageProvider = require('vectorwatch-storageprovider');
+var request = require('request');
 
 var vectorWatch = new VectorWatch({
     streamUID: process.env.STREAM_UID,
     token: process.env.VECTOR_TOKEN
 });
 
-var authProvider = new OAuth2Provider (StorageProvider, {
+var storageProvider = new StorageProvider();
+vectorWatch.setStorageProvider(storageProvider);
+
+var authProvider = new OAuth2Provider (storageProvider, {
     clientId: ***, // your App Id
     clientSecret: ***, // your App Secret
 
     accessTokenUrl: 'https://graph.facebook.com/oauth/access_token',
-    authorizeUrl: 'https://www.facebook.com/dialog/oauth?response_type=code&scope=public_profile'
+    authorizeUrl: 'https://www.facebook.com/dialog/oauth?response_type=code&scope=public_profile',
+    callbackUrl: 'http://localhost:8081/#/authCallback/' + *** + '/' + *** //stream uuid and stream version
 });
 
-vectorWatch.setStorageProvider(StorageProvider);
 vectorWatch.setAuthProvider(authProvider);
 
 var logger = vectorWatch.logger;
@@ -35,22 +39,25 @@ vectorWatch.on('subscribe', function(event, response) {
     // your stream was added to a watch face
     logger.info('on subscribe');
 
-    var settings = event.getUserSettings().settings;
-
     event.getAuthTokensAsync().then(function(authTokens) {
         if (!authTokens) {
             response.sendInvalidAuthTokens();
         }
 
-        var url = "https://graph.facebook.com/v2.6/me/?fields=id%2Cname";
+        var options = {
+            url: 'https://graph.facebook.com/v2.6/me/?fields=id%2Cname',
+            headers: {
+                'Authorization': 'OAuth ' + authTokens.access_token
+            }
+        };
 
-        authProvider.get(url, authTokens.access_token, function (err, data) {
+        request(options, function(err, httpResponse, data) {
             if (err) {
                 response.setValue("ERROR");
-                logger.error(err); 
+                logger.error(err);
             } else {
                 try {
-                    var data = JSON.parse(data);
+                    data = JSON.parse(data);
                     response.setValue(data['name']);
                 } catch (err) {
                     response.setValue("ERROR");
@@ -59,6 +66,7 @@ vectorWatch.on('subscribe', function(event, response) {
             }
             response.send();
         });
+
     });
 });
 
