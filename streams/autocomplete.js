@@ -75,6 +75,7 @@ vectorWatch.on('subscribe', function(event, response) {
 vectorWatch.on('unsubscribe', function(event, response) {
     // your stream was removed from a watch face
     logger.info('on unsubscribe');
+    response.send();
 });
 
 function getCountriesList(searchTerm) {
