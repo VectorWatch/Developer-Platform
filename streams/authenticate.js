@@ -7,10 +7,7 @@ var OAuth2Provider = require('vectorwatch-authprovider-oauth2');
 var StorageProvider = require('vectorwatch-storageprovider');
 var request = require('request');
 
-var vectorWatch = new VectorWatch({
-    streamUID: process.env.STREAM_UID,
-    token: process.env.VECTOR_TOKEN
-});
+var vectorWatch = new VectorWatch();
 
 var storageProvider = new StorageProvider();
 vectorWatch.setStorageProvider(storageProvider);

@@ -4,10 +4,7 @@ debugger;
 
 var VectorWatch = require('vectorwatch-browser');
 
-var vectorWatch = new VectorWatch({
-    streamUID: process.env.STREAM_UID,
-    token: process.env.VECTOR_TOKEN
-});
+var vectorWatch = new VectorWatch();
 
 var logger = vectorWatch.logger;
 
