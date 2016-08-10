@@ -18,7 +18,7 @@ var authProvider = new OAuth2Provider (storageProvider, {
 
     accessTokenUrl: 'https://graph.facebook.com/oauth/access_token',
     authorizeUrl: 'https://www.facebook.com/dialog/oauth?response_type=code&scope=public_profile',
-    callbackUrl: window.location.href.replace(/developer\/stream/, 'authCallback')
+    callbackUrl: 'https://developer.vectorwatch.com/platform/authCallback/'+process.env.STREAM_UUID+'/' + process.env.VERSION
 });
 
 vectorWatch.setAuthProvider(authProvider);
