@@ -96,10 +96,10 @@ function getCountriesList(searchTerm) {
 }
 
 function getCountryCurrency(country) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         var url = 'https://restcountries.eu/rest/v1/name/' + encodeURIComponent(country);
       
-        request(url, function (error, httpResponse, body) {
+        request(url, function(error, httpResponse, body) {
             if (httpResponse.statusCode != 200) {
                 reject('Countries REST call error ' + httpResponse.statusCode + ' for ' + url + ' : ' + error);
             }
