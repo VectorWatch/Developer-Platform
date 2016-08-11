@@ -48,9 +48,10 @@ function getCurrentTime() {
 function pushUpdates() {
     var streamText = getCurrentTime();
     storageProvider.getAllUserSettingsAsync().then(function(records) {
-        for (var i=0; i<records.length; i++) {
-            vectorWatch.pushStreamValue(records[i].channelLabel, streamText);
-        }
+        records.forEach(function(record) {
+            // record.userSettings
+            vectorWatch.pushStreamValue(record.channelLabel, streamText);
+        });
     });
 }
 

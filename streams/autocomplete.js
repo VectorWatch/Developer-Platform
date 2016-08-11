@@ -30,9 +30,9 @@ vectorWatch.on('options', function(event, response) {
     switch(settingName) {
         case 'Country':
             getCountriesList(searchTerm).then(function(countries) {
-                for (var i=0;i<countries.length;i++) {
-                    response.addOption(countries[i]['name']);
-                }
+                countries.forEach(function(country) {
+                    response.addOption(country['name']);
+                });
                 response.send();
             }).catch(function(e) {
                 logger.error(e);
