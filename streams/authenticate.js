@@ -48,22 +48,31 @@ vectorWatch.on('subscribe', function(event, response) {
             }
         };
 
-        request(options, function(err, httpResponse, data) {
-            if (err) {
+        request(options, function(error, httpResponse, body) {
+            if (error) {
+                logger.error('REST call error: ' + error.message + ' for ' + options.url);
                 response.setValue("ERROR");
-                logger.error(err);
-            } else {
-                try {
-                    data = JSON.parse(data);
-                    response.setValue(data['name']);
-                } catch (err) {
-                    response.setValue("ERROR");
-                    return logger.error(err);
-                }
+                response.send();
+                return;
             }
+
+            if (httpResponse && httpResponse.statusCode != 200) {
+                logger.error('REST call error: ' + httpResponse.statusCode + ' for ' + options.url);
+                response.setValue("ERROR");
+                response.send();
+                return;
+            }
+
+            try {
+                body = JSON.parse(body);
+                response.setValue(body['name']);
+            } catch (err) {
+                logger.error('Malformed JSON response from ' + options.url + ': ' + err.message);
+                response.setValue("ERROR");
+            }
+
             response.send();
         });
-
     });
 });
 
