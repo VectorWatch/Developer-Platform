@@ -29,7 +29,7 @@ vectorWatch.on('options', function(event, response) {
 
     switch(settingName) {
         case 'Country':
-            getCountriesList(searchTerm).then(function(countries) {
+            getCountries(searchTerm).then(function(countries) {
                 countries.forEach(function(country) {
                     response.addOption(country['name']);
                 });
@@ -51,8 +51,8 @@ vectorWatch.on('subscribe', function(event, response) {
     // your stream was added to a watch face
     var streamText;
     try {
-        getCountryCurrency(event.getUserSettings().settings['Country'].name).then(function(currency) {
-            response.setValue(currency);
+        getCountries(event.getUserSettings().settings['Country'].name).then(function(body) {
+            response.setValue(body[0]['currencies'][0]);
             response.send();
         }).catch(function(e) {
             logger.error(e);
@@ -75,42 +75,27 @@ vectorWatch.on('unsubscribe', function(event, response) {
     response.send();
 });
 
-function getCountriesList(searchTerm) {
+function getCountries(country) {
     return new Promise(function (resolve, reject) {
-        var url = 'https://restcountries.eu/rest/v1/name/' + encodeURIComponent(searchTerm);
-        
-        request(url, function (error, httpResponse, body) {
-            if (httpResponse.statusCode != 200) {
-                reject('Countries REST call error ' + httpResponse.statusCode + ' for ' + url + ' : ' + error);
-            }
-
-            try {
-                var bodyObject = JSON.parse(body);
-                resolve(bodyObject);
-            } catch(err) {
-                reject('Malformed REST service response for ' + url + ': ' + err.message);
-            }
-
-        });
-    });
-}
-
-function getCountryCurrency(country) {
-    return new Promise(function(resolve, reject) {
         var url = 'https://restcountries.eu/rest/v1/name/' + encodeURIComponent(country);
-      
-        request(url, function(error, httpResponse, body) {
-            if (httpResponse.statusCode != 200) {
-                reject('Countries REST call error ' + httpResponse.statusCode + ' for ' + url + ' : ' + error);
+        request(url, function (error, httpResponse, body) {
+            if (error) {
+                reject('REST call error: ' + error.message + ' for ' + url);
+                return;
             }
-            
+
+            if (httpResponse && httpResponse.statusCode != 200) {
+                reject('REST call error: ' + httpResponse.statusCode + ' for ' + url);
+                return;
+            }
+
             try {
-                var bodyObject = JSON.parse(body);
-                resolve(bodyObject[0]['currencies'][0]);
+                body = JSON.parse(body);
+                resolve(body);
             } catch(err) {
-                reject('Malformed REST service response for ' + url + ': ' + err.message);
+                reject('Malformed JSON response from ' + url + ': ' + err.message);
             }
-            
+
         });
     });
 }
