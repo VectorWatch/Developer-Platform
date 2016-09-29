@@ -23,12 +23,12 @@ vectorWatch.on('config', function(event, response) {
     from.setAsYouType(1);
 
     var to = response.createAutocomplete('To');
-    from.setHint('Select to currency');
+    to.setHint('Select to currency');
     to.setDynamic(true);
     to.setAsYouType(1);
     
     var format = response.createGridList('Format');
-    from.setHint('Select format');
+    format.setHint('Select format');
     format.addOption('Value');
     format.addOption('Value & Labels');
 
