@@ -34,14 +34,19 @@ vectorWatch.on('webhook', function (event, response) {
         streamText = 'Unknown';
     }
 
-    vectorWatch.scheduleUpdates({}, {streamText: streamText});
+    vectorWatch.pushUpdates(streamText);
+
+    /*
+    var city = event.getQuery()['cityName'];
+    var tempF = event.getQuery()['temp'];
+    var tempC = (tempF - 32)/1.8;
+
+    vectorWatch.scheduleUpdates(tempC + 'C', {City: city, metric: 'Celsius'});
+    vectorWatch.scheduleUpdates(tempF + 'F', {City: city, metric: 'Farranh'});
+    */
 
     response.setContentType('text/plain');
     response.statusCode = 200;
     response.setContent('OK');
     response.send();
-});
-
-vectorWatch.on('schedule', function(record, args) {
-    record.pushUpdate(args.streamText);
 });
