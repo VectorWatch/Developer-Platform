@@ -30,9 +30,9 @@ vectorWatch.on('unsubscribe', function(event, response) {
     response.send();
 });
 
-vectorWatch.on('pushUpdate', function(record) {
+vectorWatch.on('schedule', function(subscriber) {
     var streamText = getCurrentTime();
-    vectorWatch.pushStreamValue(record.channelLabel, streamText);
+    subscriber.pushUpdate(streamText);
 });
 
 function zerofy(n) {
@@ -43,5 +43,3 @@ function getCurrentTime() {
     var d = new Date();
     return zerofy(d.getHours()) + ':' + zerofy(d.getMinutes());
 }
-
-vectorWatch.createServer();

@@ -34,7 +34,7 @@ vectorWatch.on('webhook', function (event, response) {
         streamText = 'Unknown';
     }
 
-    vectorWatch.pushUpdates("*", {streamText: streamText});
+    vectorWatch.scheduleUpdates({}, {streamText: streamText});
 
     response.setContentType('text/plain');
     response.statusCode = 200;
@@ -42,7 +42,6 @@ vectorWatch.on('webhook', function (event, response) {
     response.send();
 });
 
-vectorWatch.on('pushUpdate', function(record, args) {
-    vectorWatch.pushStreamValue(record.channelLabel, args.streamText);
+vectorWatch.on('schedule', function(record, args) {
+    record.pushUpdate(args.streamText);
 });
-
