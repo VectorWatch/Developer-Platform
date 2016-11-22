@@ -4,7 +4,7 @@ debugger;
 
 var StorageProvider = require('vectorwatch-storageprovider');
 var Schedule = require('node-schedule');
-var VectorWatch = require('vectorwatch-browser');
+var VectorWatch = require('vectorwatch-sdk');
 
 var vectorWatch = new VectorWatch();
 
