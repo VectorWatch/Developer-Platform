@@ -2,7 +2,7 @@
 // trigger the debugger so that you can easily set breakpoints
 debugger;
 
-var VectorWatch = require('vectorwatch-browser');
+var VectorWatch = require('vectorwatch-sdk');
 
 var vectorWatch = new VectorWatch();
 
