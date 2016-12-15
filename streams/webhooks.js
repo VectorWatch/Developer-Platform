@@ -39,6 +39,7 @@ vectorWatch.on('webhook', function(event, response, records) {
         streamText = 'Unknown';
     }
     records.forEach(function(record) {
+        // record.userSettings
         record.pushUpdate(streamText);
     });
     

@@ -41,6 +41,7 @@ vectorWatch.on('schedule', function(records) {
 
     var streamText = getCurrentTime();
     records.forEach(function(record) {
+        // record.userSettings
         record.pushUpdate(streamText);
     });
 });
