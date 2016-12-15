@@ -99,5 +99,3 @@ function getCountries(country) {
         });
     });
 }
-
-vectorWatch.createServer();

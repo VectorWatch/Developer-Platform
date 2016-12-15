@@ -31,14 +31,16 @@ vectorWatch.on('unsubscribe', function(event, response) {
 	response.send();
 });
 
-vectorWatch.on('webhook', function (event, response) {
-    logger.info('Webhook!');
+vectorWatch.on('webhook', function(event, response, records) {
+    logger.info('on webhook');
     
     var streamText = event.getQuery()['msg'];
     if (typeof streamText == 'undefined') {
         streamText = 'Unknown';
     }
-    pushUpdate(streamText);
+    records.forEach(function(record) {
+        record.pushUpdate(streamText);
+    });
     
     response.setContentType('text/plain');
     response.statusCode = 200;
@@ -46,11 +48,3 @@ vectorWatch.on('webhook', function (event, response) {
     response.send();
 });
 
-function pushUpdate(streamText) {
-    storageProvider.getAllUserSettingsAsync().then(function(records) {
-        records.forEach(function(record) {
-            // record.userSettings
-            vectorWatch.pushStreamValue(record.channelLabel, streamText);
-        });
-    });
-}
