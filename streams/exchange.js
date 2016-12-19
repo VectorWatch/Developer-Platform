@@ -123,29 +123,22 @@ vectorWatch.on('unsubscribe', function(event, response) {
     response.send();
 });
 
-function pushUpdates() {
-    storageProvider.getAllUserSettingsAsync().then(function(records) {
-        records.forEach(function(record) {
-            var settings = record.userSettings;
-            try {
-                getRate(settings['From'].name, settings['To'].name).then(function(body) {
-                    var streamText = getStreamText(settings, body.query.results.rate.Rate);
-                    vectorWatch.pushStreamValue(record.channelLabel, streamText);
-                }).catch(function(e) {
-                    logger.error(e);
-                });
-            } catch(err) {
-                logger.error('on push - malformed user setting: ' + err.message);
-            }
-        });
+
+vectorWatch.on('schedule', function(records) {
+    logger.info('on schedule');
+
+    records.forEach(function(record) {
+        var settings = record.userSettings;
+        try {
+            getRate(settings['From'].name, settings['To'].name).then(function(body) {
+                var streamText = getStreamText(settings, body.query.results.rate.Rate);
+                record.pushUpdate(streamText);
+            }).catch(function(e) {
+                logger.error(e);
+            });
+        } catch(err) {
+            logger.error('on push - malformed user setting: ' + err.message);
+        }
     });
-}
-
-function scheduleJob() {
-    var scheduleRule = new Schedule.RecurrenceRule();
-    scheduleRule.minute = [0]; // will execute once every hour
-    Schedule.scheduleJob(scheduleRule, pushUpdates);
-}
-
-vectorWatch.createServer(scheduleJob);
+});
 

@@ -182,6 +182,19 @@ vectorWatch.on('unsubscribe', function(event, response) {
     response.send();
 });
 
+vectorWatch.on('schedule', function(records) {
+    logger.info('on schedule');
+
+    records.forEach(function(record) {
+        getActiveUsersValue(record.authTokens.access_token, record.userSettings).then(function(goal) {
+            record.pushUpdate(goal['totalsForAllResults']['rt:activeUsers'] + ' active users');
+        }).catch(function(e) {
+            logger.error(e);
+            record.pushUpdate('ERROR');
+        });
+    });
+});
+
 function getAccountsList(access_token) {
     return google_request(access_token, 'https://www.googleapis.com/analytics/v3/management/accountSummaries');
 }
@@ -243,23 +256,3 @@ function google_request(access_token, url) {
     });
 }
 
-function pushUpdates() {
-    storageProvider.getAllUserSettingsAsync().then(function(records) {
-        records.forEach(function(record) {
-            getActiveUsersValue(record.authTokens.access_token, record.userSettings).then(function(goal) {
-                vectorWatch.pushStreamValue(record.channelLabel, goal['totalsForAllResults']['rt:activeUsers'] + ' active users');
-            }).catch(function(e) {
-                logger.error(e);
-                vectorWatch.pushStreamValue(record.channelLabel, 'ERROR');
-            });
-        });
-    });
-}
-
-function scheduleJob() {
-    var scheduleRule = new Schedule.RecurrenceRule();
-    scheduleRule.minute = [0, 10, 20, 30, 40, 50]; // will execute every 10 minutes
-    Schedule.scheduleJob(scheduleRule, pushUpdates);
-}
-
-vectorWatch.createServer(scheduleJob);

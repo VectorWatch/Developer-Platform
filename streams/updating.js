@@ -36,6 +36,16 @@ vectorWatch.on('unsubscribe', function(event, response) {
     response.send();
 });
 
+vectorWatch.on('schedule', function(records) {
+    logger.info('on schedule');
+
+    var streamText = getCurrentTime();
+    records.forEach(function(record) {
+        // record.userSettings
+        record.pushUpdate(streamText);
+    });
+});
+
 function zerofy(n) {
     return (n<10)?'0'+n:n;
 }
@@ -45,20 +55,3 @@ function getCurrentTime() {
     return zerofy(d.getHours()) + ':' + zerofy(d.getMinutes());
 }
 
-function pushUpdates() {
-    var streamText = getCurrentTime();
-    storageProvider.getAllUserSettingsAsync().then(function(records) {
-        records.forEach(function(record) {
-            // record.userSettings
-            vectorWatch.pushStreamValue(record.channelLabel, streamText);
-        });
-    });
-}
-
-function scheduleJob() {
-    var scheduleRule = new Schedule.RecurrenceRule();
-    scheduleRule.minute = [15, 45]; // will execute at :15 and :45 every hour
-    Schedule.scheduleJob(scheduleRule, pushUpdates);
-}
-
-vectorWatch.createServer(scheduleJob);

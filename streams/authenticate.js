@@ -81,5 +81,3 @@ vectorWatch.on('unsubscribe', function(event, response) {
     logger.info('on unsubscribe');
     response.send();
 });
-
-vectorWatch.createServer();
