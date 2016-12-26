@@ -2,14 +2,9 @@
 // trigger the debugger so that you can easily set breakpoints
 debugger;
 
-var VectorWatch = require('vectorwatch-sdk');
 var request = require('request');
-var Schedule = require('node-schedule');
-var StorageProvider = require('vectorwatch-storageprovider');
-
+var VectorWatch = require('vectorwatch-sdk');
 var vectorWatch = new VectorWatch();
-var storageProvider = new StorageProvider();
-vectorWatch.setStorageProvider(storageProvider);
 
 var logger = vectorWatch.logger;
 
