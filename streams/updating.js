@@ -2,16 +2,10 @@
 // trigger the debugger so that you can easily set breakpoints
 debugger;
 
-var StorageProvider = require('vectorwatch-storageprovider');
-var Schedule = require('node-schedule');
 var VectorWatch = require('vectorwatch-sdk');
-
 var vectorWatch = new VectorWatch();
 
 var logger = vectorWatch.logger;
-
-var storageProvider = new StorageProvider();
-vectorWatch.setStorageProvider(storageProvider);
 
 vectorWatch.on('config', function(event, response) {
     // your stream was just dragged onto a watch face
